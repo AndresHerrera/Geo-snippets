@@ -20,6 +20,10 @@
 	* [Get tables with wrong SRID](#get-tables-with-wrong-srid)
 	* [Spatial join point in polygon](#spatial-join-point-in-polygon)
 	* [Check validity of geometries](#check-validity-of-geometries)
+	* [Get extent of table](#get-extent-of-table)
+	* [Change projection of data](#change-projection-of-data)
+	
+
 	
 
 * [shp2pgsql](#shp2pgsql)
@@ -111,7 +115,7 @@ PostGIS
 
 ### Get the geometry type
 ```sql
- SELECT st_geometrytype(the_geom) FROM  table;
+ SELECT st_geometrytype(the_geom) FROM  schema.table;
 ```
 
 ### Get tables with wrong SRID
@@ -122,7 +126,7 @@ WHERE t.srid <> 4326 ORDER BY t.f_table_schema, t.f_table_name;
 ```
 ### Find a table SRID
 ```sql
-SELECT Find_SRID('public', 'table', 'the_geom');
+SELECT Find_SRID('schema', 'table', 'the_geom');
 ```
 
 ### Spatial join point in polygon
@@ -135,11 +139,22 @@ WHERE ST_Within(a.the_geom, b.the_geom);
 ### Check validity of geometries
 ```sql
 SELECT *
-FROM table
+FROM schema.table
 WHERE ST_IsValid(the_geom) = true;
 ```
 
+### Get extent of table
+```sql
+SELECT ST_XMax(r) AS xmax, ST_XMin(r) AS xmin, ST_YMax(r) AS ymax, ST_YMin(r) AS ymin 
+FROM (SELECT ST_Collect(the_geom) AS r FROM schema.table) AS foo;
+```
 
+### Change projection of data
+```sql
+ALTER TABLE schema.table ALTER COLUMN the_geom TYPE Geometry(MultiLineString, 3115) 
+USING ST_Transform(the_geom, 3115);
+COMMIT;
+```
 
 shp2pgsql
 ----------
