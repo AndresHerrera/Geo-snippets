@@ -1,6 +1,6 @@
 # Geo-snippets
 
-** This repository contains a collection of code snippets for geo developers**
+**This repository contains a collection of code snippets for geo developers**
 
 ## Snippets
 
