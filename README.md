@@ -76,6 +76,11 @@ ogr2ogr -f GeoJSON -t_srs crs:84 output.geojson input.shp
 ogr2ogr -f KML -t_srs crs:84 output.KML input.shp
 ```
 
+* Export dbf table to PostgreSQL:
+```
+ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" table_dbf.dbf -nln "newtable"
+```
+
 * Import to PostgreSQL table from csv and Virtual File Format (vrt) - [Example data](ogr2ogr/pg_from_csv)
 ```
 ogr2ogr -a_srs epsg:4326 -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" file.vrt
@@ -116,6 +121,27 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres passwor
 
 ### python
 
+### DOS or UNIX Bash Commands
+
+* Load all shapefiles into Postgres (allshp2dbpgsql):
+```
+@echo allshp2dbpgsql
+@echo off
+color 20
+for %%x in (*.shp) do ogr2ogr -f "PostgreSQL" PG:"host=localhost user=postgres dbname=database password=12345 port:5432" %%~nx.shp
+pause
+exit
+```
+
+* Convert all shapefiles into Postgres (allshapes2pgsql):
+```
+@echo allshapes2pgsql
+@echo off
+color 20
+for %%x in (*.shp) do shp2pgsql -g the_geom -s 4326 -W latin1 %%~nx %%~nx > %%~nx.sql
+pause
+exit
+```
 
 ## Author: Andres Herrera &copy; 2020
 
