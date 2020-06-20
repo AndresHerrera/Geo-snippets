@@ -123,7 +123,7 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres passwor
 
 ### DOS or UNIX Bash Commands
 
-* Load all shapefiles into Postgres (allshp2dbpgsql):
+* Load all shapefiles into Postgres (allshp2dbpgsql.bat):
 ```
 @echo allshp2dbpgsql
 @echo off
@@ -133,7 +133,7 @@ pause
 exit
 ```
 
-* Convert all shapefiles into Postgres (allshapes2pgsql):
+* Convert all shapefiles into Postgres (allshapes2pgsql.bat):
 ```
 @echo allshapes2pgsql
 @echo off
