@@ -2,26 +2,54 @@
 
 **This repository contains a collection of code snippets for geo developers**
 
-## Snippets
+GPS
+* [Export a Garmin fit activity to gpx](#gps1)
+PostgreSQL
+* [Create PostgreSQL database](#pgsql1)
+* [Create PostGIS and PgRouting extensions in PostgreSQL](#pgsql2)
+PostGIS
 
-### GPS
+shp2pgsql
 
-* Export a Garmin fit activity to gpx:
+ogr2ogr
+
+gdal
+
+python
+
+DOS or UNIX Bash Commands
+
+	
+	
+Snippets
+=======
+
+
+GPS
+----------
+
+### Export a Garmin fit activity to gpx
 ```
 gpsbabel -t -i garmin_fit -f input.FIT -o gpx -F output.gpx
 ```
 
-### PostgreSQL
+PostgreSQL
+----------
 
-* Create PostgreSQL database:
+### Create PostgreSQL database
 ```
 createdb -U user -p 5432 -h localhost -E UTF8 -e databasename 
 ```
 
-* Create PostGIS and PgRouting extensions in PostgreSQL:
+### Create PostGIS and PgRouting extensions in PostgreSQL
 ```
 psql -U user -p 5432 -h localhost -d databasename -c "CREATE EXTENSION postgis;"
 psql -U user -p 5432 -h localhost -d databasename -c "CREATE EXTENSION pgrouting;"
+```
+
+* Add PostgreSQL extensions:
+```sql
+CREATE EXTENSION IF NOT EXISTS postgis; 
 ```
 
 * Import to PostgreSQL from SQL file:
@@ -34,7 +62,13 @@ psql -U user -d databasename -h localhost -p 5432 -f input_file.sql
 COPY table_name FROM 'data.csv' WITH DELIMITER ',' CSV HEADER;
 ```
 
-### PostGIS
+* Exports table as a JSON array:
+```
+COPY (SELECT array_to_json(array_agg(t)) FROM schema.table as t) to '/output.json'
+```
+
+PostGIS
+----------
 
 * Get the geometry type:
 ```sql
@@ -47,14 +81,17 @@ SELECT Find_SRID('public', 'table', 'the_geom');
 ```
 
 
-### shp2pgsql
+shp2pgsql
+----------
 
 * Export a shapefile to SQL:
 ```
 shp2pgsql -g the_geom -s 4326 -W latin1 shapefile table_name > output.sql
 ```
 
-### ogr2ogr
+
+ogr2ogr
+----------
 
 * Export a new shapefile filtered by criteria:
 ```
@@ -116,12 +153,16 @@ ogr2ogr -f GPKG output.gpkg PG:"dbname=database host=localhost user=postgres pas
 ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" input.gpkg -nln "new_table"
 ```
 
-### gdal
+gdal
+----------
 
 
-### python
+python
+----------
 
-### DOS or UNIX Bash Commands
+
+DOS or UNIX Bash Commands
+----------
 
 * Load all shapefiles into Postgres (allshp2dbpgsql.bat):
 ```
@@ -139,6 +180,16 @@ exit
 @echo off
 color 20
 for %%x in (*.shp) do shp2pgsql -g the_geom -s 4326 -W latin1 %%~nx %%~nx > %%~nx.sql
+pause
+exit
+```
+
+* Convert all Garmin Fit to GPX (allfit2gpx.bat):
+```
+@echo allfit2gpx
+@echo off
+color 20
+for %%x in (*.fit) do gpsbabel -t -i garmin_fit -f %%~nx.fit -o gpx -F %%~nx.gpx
 pause
 exit
 ```
