@@ -41,6 +41,8 @@
 	* [Export many Postgres tables to GeoPackage](#export-many-postgres-tables-to-geopackage)
 	* [Export a whole Postgres database to GeoPackage](#export-a-whole-postgres-database-to-geopackage)
 	* [Load a single layer GeoPackage into Postgres](#load-a-single-layer-geopackage-into-postgres)
+	* [PostGIS to SQLite](#postgis-to-sqlite)
+
 
 * [gdal](#gdal)
 
@@ -237,6 +239,11 @@ ogr2ogr -f GPKG output.gpkg PG:"dbname=database host=localhost user=postgres pas
 ### Load a single layer GeoPackage into Postgres
 ```
 ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" input.gpkg -nln "new_table"
+```
+
+### PostGIS to SQLite
+```
+ogr2ogr -progress -gt 65536 -f "SQLite" data.sqlite PG:"dbname=database host=localhost user=postgres password=postgres port=5432" -a_srs "EPSG:4326"
 ```
 
 gdal
