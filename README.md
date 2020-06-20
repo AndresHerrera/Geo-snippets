@@ -42,9 +42,14 @@
 	* [Export a whole Postgres database to GeoPackage](#export-a-whole-postgres-database-to-geopackage)
 	* [Load a single layer GeoPackage into Postgres](#load-a-single-layer-geopackage-into-postgres)
 	* [PostGIS to SQLite](#postgis-to-sqlite)
+	* [Import Geodatabase to PostGIS](#import-geodatabase-to-postgis)
+	* [Reading the meta data using ogrinfo](#reading-the-meta-data-using-ogrinfo)
 
 
 * [gdal](#gdal)
+	* [Create virtual raster from a folder containing Geotiff files](#create-virtual-raster-from-a-folder-containing-geotiff-files)
+	* [Create tiles to disk from GeoTiff file](#create-tiles-to-disk-from-geotiff-file)
+	* [Create a hillsahe from a dem Geotiff](#create-a-hillsahe-from-a-dem-geotiff)
 
 * [Python](#python)
 
@@ -246,9 +251,34 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres passwor
 ogr2ogr -progress -gt 65536 -f "SQLite" data.sqlite PG:"dbname=database host=localhost user=postgres password=postgres port=5432" -a_srs "EPSG:4326"
 ```
 
+### Import Geodatabase to PostGIS
+```
+ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" data.gdb -a_srs EPSG:4326
+```
+
+## Reading the meta data using ogrinfo
+```
+ogrinfo -ro data.shp
+```
+
 gdal
 ----------
 
+## Create virtual raster from a folder containing Geotiff files
+```
+gdalbuildvrt file.vrt folder_name/*.tif
+```
+
+## Create tiles to disk from GeoTiff file
+```
+gdal2tiles.py input.tif output_folder  -z 6-18 -r antialias
+```
+*Zoom level 6 to 18
+
+## Create a hillsahe from a dem Geotiff
+```
+gdaldem hillshade inputdem.tif  outputhillshade.tif
+```
 
 Python
 ----------
