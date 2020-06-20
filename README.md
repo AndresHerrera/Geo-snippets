@@ -1,9 +1,6 @@
 # Geo-snippets
 
 **This repository contains a collection of code snippets for geo developers**
-
-* [GPS](#gps)
-	* [Export a Garmin fit activity to gpx](#export-a-garmin-fit-activity-to-gpx)
 	
 * [PostgreSQL](#postgresql)
 	* [Create PostgreSQL database](#create-postgresql-database)
@@ -13,6 +10,11 @@
 	* [Import CSV file to a PostgreSQL table](#import-csv-file-to-a-postgresql-table)
 	* [Exports table as a JSON array](#exports-table-as-a-json-array)
 	* [Create an unique id](#create-an-unique-id)
+	* [Size of database](#size-of-database)
+	* [Size of schema](#size-of-schema)
+	* [Find duplicates](#find-duplicates)
+
+	
 	
 * [PostGIS](#postgis)
 	* [Get the geometry type](#get-the-geometry-type)
@@ -23,9 +25,6 @@
 	* [Get extent of table](#get-extent-of-table)
 	* [Change projection of data](#change-projection-of-data)
 	
-
-	
-
 * [shp2pgsql](#shp2pgsql)
 	* [Export a shapefile to SQL](#export-a-shapefile-to-sql)
 
@@ -43,31 +42,21 @@
 	* [Export a whole Postgres database to GeoPackage](#export-a-whole-postgres-database-to-geopackage)
 	* [Load a single layer GeoPackage into Postgres](#load-a-single-layer-geopackage-into-postgres)
 
-
 * [gdal](#gdal)
 
 * [Python](#python)
+
+* [GPS](#gps)
+	* [Export a Garmin fit activity to gpx](#export-a-garmin-fit-activity-to-gpx)
 
 * [DOS or UNIX Bash routines](#dos-or-unix-bash-routines)
 	* [Load all shapefiles into Postgres](#load-all-shapefiles-into-postgres)
 	* [Convert all Garmin Fit to GPX](#convert-all-garmin-fit-to-gpx)
 
 
-
-
-	
 	
 Snippets
 =======
-
-
-GPS
-----------
-
-### Export a Garmin fit activity to gpx
-```
-gpsbabel -t -i garmin_fit -f input.FIT -o gpx -F output.gpx
-```
 
 PostgreSQL
 ----------
@@ -106,9 +95,31 @@ FROM schema.table as t) to '/output.json'
 
 ### Create an unique id
 ```sql
-SELECT ROW_NUMBER() OVER (ORDER BY column ) AS id  
+SELECT ROW_NUMBER() OVER (ORDER BY column ) as id  
 FROM schema.table;
 ```
+
+### Size of database
+```sql
+SELECT pg_size_pretty(pg_database_size('databasename')) as dbsize;
+```
+
+### Size of schema
+```sql
+select pg_size_pretty(CAST((SELECT
+SUM(pg_total_relation_size(table_schema || '.' || table_name) )
+FROM information_schema.tables
+WHERE table_schema = 'schema') as bigint) )  as schema_size;
+```
+
+### Find duplicates
+```sql
+SELECT column, COUNT(column) AS numocurrences
+FROM schema.table
+GROUP BY column
+HAVING ( COUNT(column) > 1 );
+```
+
 
 PostGIS
 ----------
@@ -153,7 +164,6 @@ FROM (SELECT ST_Collect(the_geom) AS r FROM schema.table) AS foo;
 ```sql
 ALTER TABLE schema.table ALTER COLUMN the_geom TYPE Geometry(MultiLineString, 3115) 
 USING ST_Transform(the_geom, 3115);
-COMMIT;
 ```
 
 shp2pgsql
@@ -235,6 +245,14 @@ gdal
 
 Python
 ----------
+
+GPS
+----------
+
+### Export a Garmin fit activity to gpx
+```
+gpsbabel -t -i garmin_fit -f input.FIT -o gpx -F output.gpx
+```
 
 
 DOS or UNIX Bash routines
