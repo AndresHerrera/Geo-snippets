@@ -12,11 +12,16 @@
 	* [Import to PostgreSQL from SQL file](#import-to-postgresql-from-sql-file)
 	* [Import CSV file to a PostgreSQL table](#import-csv-file-to-a-postgresql-table)
 	* [Exports table as a JSON array](#exports-table-as-a-json-array)
+	* [Create an unique id](#create-an-unique-id)
 	
 * [PostGIS](#postgis)
 	* [Get the geometry type](#get-the-geometry-type)
 	* [Find a table SRID](#find-a-table-srid)
+	* [Get tables with wrong SRID](#get-tables-with-wrong-srid)
+	* [Spatial join point in polygon](#spatial-join-point-in-polygon)
+	* [Check validity of geometries](#check-validity-of-geometries)
 	
+
 * [shp2pgsql](#shp2pgsql)
 	* [Export a shapefile to SQL](#export-a-shapefile-to-sql)
 
@@ -85,13 +90,20 @@ psql -U user -d databasename -h localhost -p 5432 -f input_file.sql
 ```
 
 ### Import CSV file to a PostgreSQL table
-```
+```sql
 COPY table_name FROM 'data.csv' WITH DELIMITER ',' CSV HEADER;
 ```
 
 ### Exports table as a JSON array
+```sql
+COPY (SELECT array_to_json(array_agg(t)) 
+FROM schema.table as t) to '/output.json'
 ```
-COPY (SELECT array_to_json(array_agg(t)) FROM schema.table as t) to '/output.json'
+
+### Create an unique id
+```sql
+SELECT ROW_NUMBER() OVER (ORDER BY column ) AS id  
+FROM schema.table;
 ```
 
 PostGIS
@@ -102,10 +114,32 @@ PostGIS
  SELECT st_geometrytype(the_geom) FROM  table;
 ```
 
+### Get tables with wrong SRID
+```sql
+SELECT t.f_table_catalog, t.f_table_schema, t.f_table_name, t.f_geometry_column, t.coord_dimension, t.srid, t.type
+FROM geometry_columns t 
+WHERE t.srid <> 4326 ORDER BY t.f_table_schema, t.f_table_name;
+```
 ### Find a table SRID
 ```sql
 SELECT Find_SRID('public', 'table', 'the_geom');
 ```
+
+### Spatial join point in polygon
+```sql
+SELECT *
+FROM table1 a, table2 b
+WHERE ST_Within(a.the_geom, b.the_geom);
+```
+
+### Check validity of geometries
+```sql
+SELECT *
+FROM table
+WHERE ST_IsValid(the_geom) = true;
+```
+
+
 
 shp2pgsql
 ----------
