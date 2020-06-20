@@ -6,84 +6,109 @@
 
 ### GPS
 
-** Export a Garmin fit activity to gpx:**
+* Export a Garmin fit activity to gpx:
 ```
 gpsbabel -t -i garmin_fit -f input.FIT -o gpx -F output.gpx
 ```
 
 ### PostgreSQL
 
-** Create PostgreSQL database:**
+* Create PostgreSQL database:
 ```
 createdb -U user -p 5432 -h localhost -E UTF8 -e databasename 
 ```
 
-** Create extension in PostgreSQL:**
+* Create PostGIS and PgRouting extensions in PostgreSQL:
 ```
 psql -U user -p 5432 -h localhost -d databasename -c "CREATE EXTENSION postgis;"
+psql -U user -p 5432 -h localhost -d databasename -c "CREATE EXTENSION pgrouting;"
 ```
 
-** Import to PostgreSQL from SQL file:**
+* Import to PostgreSQL from SQL file:
 ```
 psql -U user -d databasename -h localhost -p 5432 -f input_file.sql
 ```
 
-**Import CSV file to a PostgreSQL table:**
+* Import CSV file to a PostgreSQL table:
 ```
 COPY table_name FROM 'data.csv' WITH DELIMITER ',' CSV HEADER;
 ```
 
 ### PostGIS
 
+* Get the geometry type:
+```sql
+ SELECT st_geometrytype(the_geom) FROM  table;
+```
+
+* Find a table SRID:
+```sql
+SELECT Find_SRID('public', 'table', 'the_geom');
+```
 
 
 ### shp2pgsql
 
-** Export a shapefile to SQL:**
+* Export a shapefile to SQL:
 ```
 shp2pgsql -g the_geom -s 4326 -W latin1 shapefile table_name > output.sql
 ```
 
 ### ogr2ogr
 
-** Export a new shapefile filtered by criteria:**
+* Export a new shapefile filtered by criteria:
 ```
 ogr2ogr -sql "SELECT * FROM input WHERE criteria=1" output.shp input.shp
 ```
 
-** Shapefile to GML**
+* Export a shapefile to GML:
 ```
 ogr2ogr -f GML -t_srs crs:84 output.gml input.shp
 ```
 
-** Shapefile to GeoJSON**
+* Export a shapefile to GeoJSON:
 ```
 ogr2ogr -f GeoJSON -t_srs crs:84 output.geojson input.shp
 ```
 
-** Export a shapefile to KML:**
+* Export a shapefile to KML:
 ```
 ogr2ogr -f KML -t_srs crs:84 output.KML input.shp
 ```
 
-** Import to PostgreSQL table from csv and Virtual File Format (vrt)**  - [Example data](ogr2ogr/pg_from_csv)
+* Import to PostgreSQL table from csv and Virtual File Format (vrt) - [Example data](ogr2ogr/pg_from_csv)
 ```
 ogr2ogr -a_srs epsg:4326 -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" file.vrt
 ```
 
-** Export a csv file to dbf:** 
+* Export a csv file to dbf:
 ```
 ogr2ogr -f "ESRI Shapefile" output.dbf input.csv
 ```
 
-** Export a csv file to shapefile:** - [Example data](ogr2ogr/csv_to_shp)
+* Export a csv file to shapefile:- [Example data](ogr2ogr/csv_to_shp)
 ```
 ogr2ogr -f "ESRI Shapefile" output_shp_xy data.vrt
 ```
 
-** Export a Postgres table to GeoPackage:**
+* Export a Postgres table to GeoPackage:
 ```
 ogr2ogr -f GPKG output.gpkg PG:"dbname=database host=localhost user=postgres password=postgres port=5432" "table"
+```
+
+* Export many Postgres tables to GeoPackage:
+```
+ogr2ogr -f GPKG output.gpkg PG:"dbname=database host=localhost user=postgres password=postgres port=5432 tables=table1,table2,table3"
+```
+
+* Export a whole Postgres database to GeoPackage:
+```
+ogr2ogr -f GPKG output.gpkg PG:"dbname=database host=localhost user=postgres password=postgres port=5432"
+```
+
+* Load a single layer GeoPackage into Postgres:
+```
+ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres password=postgres port=5432" input.gpkg -nln "new_table"
 ```
 
 ### gdal
