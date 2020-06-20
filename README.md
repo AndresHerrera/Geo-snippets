@@ -3,10 +3,10 @@
 **This repository contains a collection of code snippets for geo developers**
 
 * [GPS](#gps)
-	* [Export a Garmin fit activity to gpx](#gps1)
-* [PostgreSQL](#pgsql)
-	* [Create PostgreSQL database](#pgsql1)
-	* [Create PostGIS and PgRouting extensions in PostgreSQL](#pgsql2)
+	* [Export a Garmin fit activity to gpx](#export-a-garmin-fit-activity-to-gpx)
+* [PostgreSQL](#postgresql)
+	* [Create PostgreSQL database](#create-postgresql-database)
+	* [Create PostGIS and PgRouting extensions in PostgreSQL](#create-postgis-and-pgrouting-extensions-in-postgresql)
 PostGIS
 
 shp2pgsql
