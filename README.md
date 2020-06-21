@@ -50,6 +50,11 @@
 	* [Create virtual raster from a folder containing Geotiff files](#create-virtual-raster-from-a-folder-containing-geotiff-files)
 	* [Create tiles to disk from GeoTiff file](#create-tiles-to-disk-from-geotiff-file)
 	* [Create a hillsahe from a dem Geotiff](#create-a-hillsahe-from-a-dem-geotiff)
+	* [Crop a raster file according to a shapefile](#crop-a-raster-file-according-to-a-shapefile)
+	* [Merge bands into a raster file](#merge-bands-into-a-raster-file)
+	* [Merge bands into a raster file spatially](#merge-bands-into-a-raster-file-spatially)
+	* [Resample a raster file](#resample-a-raster-file)
+	
 
 * [Python](#python)
 
@@ -279,6 +284,29 @@ gdal2tiles.py input.tif output_folder  -z 6-18 -r antialias
 ```
 gdaldem hillshade inputdem.tif  outputhillshade.tif
 ```
+
+## Crop a raster file according to a shapefile
+```
+gdalwarp -overwrite -s_srs EPSG:3115 -q -cutline shapefile.shp -of GTiff input.tiff output.tiff
+```
+
+## Merge bands into a raster file
+```
+gdal_merge.py -o output.tiff -of GTiff -ps 10 10 -separate band1.tiff band2.tiff band3.tiff
+```
+*10 x 10 meter pixel
+
+## Merge bands into a raster file spatially
+```
+gdal_merge.py -o output.tiff -of GTiff band1.tiff band2.tiff band3.tiff
+```
+
+## Resample a raster file
+```
+gdal_translate -outsize 50% 50% input.tif output.tif
+```
+*Resample to 50%
+
 
 Python
 ----------
