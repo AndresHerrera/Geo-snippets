@@ -19,6 +19,7 @@
 * [PostGIS](#postgis)
 	* [Get the geometry type](#get-the-geometry-type)
 	* [Find a table SRID](#find-a-table-srid)
+	* [Change table SRID](#change-table-srid)
 	* [Get tables with wrong SRID](#get-tables-with-wrong-srid)
 	* [Spatial join point in polygon](#spatial-join-point-in-polygon)
 	* [Check validity of geometries](#check-validity-of-geometries)
@@ -150,6 +151,11 @@ WHERE t.srid <> 4326 ORDER BY t.f_table_schema, t.f_table_name;
 ### Find a table SRID
 ```sql
 SELECT Find_SRID('schema', 'table', 'the_geom');
+```
+
+### Change table SRID
+```sql
+SELECT UpdateGeometrySRID('schema', 'table', 'the_geom',4326);
 ```
 
 ### Spatial join point in polygon
