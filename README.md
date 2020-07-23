@@ -66,7 +66,8 @@
 	* [Load all shapefiles into Postgres](#load-all-shapefiles-into-postgres)
 	* [Convert all Garmin Fit to GPX](#convert-all-garmin-fit-to-gpx)
 
-
+* [PoTree](#potree)
+	* [convert las to potree](#convert-las-to-potree)
 	
 Snippets
 =======
@@ -358,6 +359,17 @@ for %%x in (*.fit) do gpsbabel -t -i garmin_fit -f %%~nx.fit -o gpx -F %%~nx.gpx
 pause
 exit
 ```
+
+Potree
+----------
+
+### Convert las to potree
+
+```
+PotreeConverter.exe C:/temporal/input.las -o C:/temporal/data_converted
+```
+
+
 
 ## Author: Andres Herrera &copy; 2020
 
