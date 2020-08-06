@@ -46,6 +46,8 @@
 	* [Import Geodatabase to PostGIS](#import-geodatabase-to-postgis)
 	* [Reading the meta data using ogrinfo](#reading-the-meta-data-using-ogrinfo)
 
+* [osm2pgsql](#osm2pgsql)
+       * [Import OSM pbf file to PostGIS](#import-osm-pbf-file-to-postgis)
 
 * [gdal](#gdal)
 	* [Create virtual raster from a folder containing Geotiff files](#create-virtual-raster-from-a-folder-containing-geotiff-files)
@@ -272,6 +274,16 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=database host=localhost user=postgres passwor
 ```
 ogrinfo -ro data.shp
 ```
+
+osm2pgsql
+----------
+
+## Import OSM pbf file to PostGIS]
+
+```
+osm2pgsql -c -d database -U postgres -H localhost -S osm2pgsql/default.style input_file.osm.pbf 
+```
+
 
 gdal
 ----------
