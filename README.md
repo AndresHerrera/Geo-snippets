@@ -364,7 +364,7 @@ exit
 
 ### Convert all Garmin Fit to GPX
 ```
-@echo allfit2gpx.bar
+@echo allfit2gpx.bat
 @echo off
 color 20
 for %%x in (*.fit) do gpsbabel -t -i garmin_fit -f %%~nx.fit -o gpx -F %%~nx.gpx
